@@ -1,26 +1,58 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React,{ Component } from 'react';
+import { TaskList } from './TaskList';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+class App extends Component{
+  constructor(){
+    super();
+    this.state = {
+      items: [],
+      value: ''
+    }
+  }
+
+  addValue = ( item ) => {
+    this.setState(
+      {value: item.target.value}
+    )
+  };
+
+  addItem = ( e ) => {
+    e.preventDefault();
+    this.setState(
+      {
+        value:'',
+        items: [...this.state.items, this.state.value]
+      }
+    )
+  };
+
+  delItem = (e) =>{
+    this.setState({
+      items: this.state.items.filter(item => item !== e)
+    });
+  };
+
+  render(){
+    return (
+      <div>
+        <div className="ui container" style={{marginTop:"5%"}}>
+           <TaskList items = {this.state.items} deleteItem={this.delItem}/>
+        </div>
+
+      <div className="ui segment fixed sticky bottom" style={ { width:"100%" }}>
+      <form onSubmit={ (e) => this.addItem(e)} className="ui fluid focus input">
+        <input type="text"
+          placeholder="item to add . . . "
+          onChange={this.addValue}
+          value={this.state.value}
+        />
+      </form>
+      </div>
     </div>
-  );
+
+    );
+  }
 }
+
 
 export default App;
